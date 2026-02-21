@@ -1,49 +1,59 @@
 import { NextResponse } from 'next/server';
+import { createPublicClient, http } from 'viem';
+import { SKIN_TRACE_ABI } from '@/lib/abis';
+import { monadTestnet } from '@/lib/config';
 
-const BATCHES = [
-  {
-    tokenId: 0,
-    residueType: 'SEED',
-    weight: '500000',
-    variety: 'Hass',
-    quality: 'FRESH',
-    producer: '0xa98100E028ffE19Cbc1E9BF9BCF33458e064892A',
-    isListed: true,
-    ipfsHash: 'ipfs://QmSeedBatch001'
-  },
-  {
-    tokenId: 1,
-    residueType: 'PEEL',
-    weight: '800000',
-    variety: 'Hass',
-    quality: 'FRESH',
-    producer: '0xa98100E028ffE19Cbc1E9BF9BCF33458e064892A',
-    isListed: true,
-    ipfsHash: 'ipfs://QmPeelBatch001'
-  },
-  {
-    tokenId: 2,
-    residueType: 'PULP',
-    weight: '300000',
-    variety: 'Mendez',
-    quality: 'PARTIALLY_DEHYDRATED',
-    producer: '0xa98100E028ffE19Cbc1E9BF9BCF33458e064892A',
-    isListed: true,
-    ipfsHash: 'ipfs://QmPulpBatch001'
-  },
-  {
-    tokenId: 3,
-    residueType: 'BIOMASS',
-    weight: '1000000',
-    variety: 'Criollo',
-    quality: 'FRESH',
-    producer: '0xa98100E028ffE19Cbc1E9BF9BCF33458e064892A',
-    currentCustodian: '0xfe05914BdFAD80734D55b91015Dd09c6dA0Ae5fB',
-    isListed: false,
-    ipfsHash: 'ipfs://QmBiomassBatch001'
-  }
-];
+const client = createPublicClient({
+  chain: monadTestnet,
+  transport: http('https://testnet-rpc.monad.xyz'),
+});
+
+const SKIN_TRACE_ADDRESS = '0x1Deed2c283b950439E1AfE726AEb7Ee257E6aa41' as `0x${string}`;
 
 export async function GET() {
-  return NextResponse.json({ success: true, data: BATCHES });
+  try {
+    const totalBatches = await client.readContract({
+      address: SKIN_TRACE_ADDRESS,
+      abi: SKIN_TRACE_ABI,
+      functionName: 'totalBatches',
+    }) as bigint;
+
+    const batches = [];
+    
+    for (let i = 0; i < Number(totalBatches); i++) {
+      try {
+        const batchData = await client.readContract({
+          address: SKIN_TRACE_ADDRESS,
+          abi: SKIN_TRACE_ABI,
+          functionName: 'getBatch',
+          args: [BigInt(i)],
+        }) as [bigint, `0x${string}`, number, bigint, string, number, string, bigint, bigint, bigint, `0x${string}`, boolean];
+
+        batches.push({
+          tokenId: Number(batchData[0]),
+          producer: batchData[1],
+          residueType: batchData[2],
+          weight: batchData[3].toString(),
+          variety: batchData[4],
+          quality: batchData[5],
+          ipfsHash: batchData[6],
+          latitude: batchData[7].toString(),
+          longitude: batchData[8].toString(),
+          timestamp: Number(batchData[9]),
+          currentCustodian: batchData[10],
+          isListed: batchData[11],
+        });
+      } catch (e) {
+        console.error('Error fetching batch', i, e);
+      }
+    }
+
+    return NextResponse.json({ success: true, data: batches });
+  } catch (error) {
+    console.error('Error fetching batches:', error);
+    return NextResponse.json(
+      { success: false, error: 'Failed to fetch batches' },
+      { status: 500 }
+    );
+  }
 }
