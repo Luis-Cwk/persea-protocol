@@ -108,7 +108,7 @@ export default function MarketPage() {
     ? STATIC_LISTINGS.filter(l => l.active)
     : STATIC_LISTINGS.filter(l => l.active && RESIDUE_TYPES.find(t => t.name === filter)?.id === l.residueType);
 
-  const hasAllowance = allowance && allowance > 0n;
+  const hasAllowance = allowance && allowance > BigInt(0);
   const balanceFormatted = balance ? formatUnits(balance, 18) : '0';
 
   return (
