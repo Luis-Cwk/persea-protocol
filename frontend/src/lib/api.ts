@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || '/api';
 
 export const api = axios.create({
   baseURL: API_URL,
@@ -122,12 +122,12 @@ export async function getListings(params?: {
   limit?: number;
   offset?: number;
 }): Promise<{ success: boolean; data: Listing[] }> {
-  const response = await api.get('/market', { params });
+  const response = await api.get('/listings', { params });
   return response.data;
 }
 
 export async function getListing(listingId: number): Promise<{ success: boolean; data: Listing }> {
-  const response = await api.get(`/market/${listingId}`);
+  const response = await api.get(`/listings/${listingId}`);
   return response.data;
 }
 
