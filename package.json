@@ -34,5 +34,9 @@
     "defi"
   ],
   "author": "PERSÉA Protocol Team",
-  "license": "MIT"
+  "license": "MIT",
+  "main": "index.js",
+  "devDependencies": {
+    "viem": "^2.46.2"
+  }
 }
