@@ -1,0 +1,38 @@
+{
+  "name": "persea-protocol",
+  "version": "1.0.0",
+  "private": true,
+  "description": "PERSÉA Protocol - Trazabilidad y Aprovechamiento de Residuos del Aguacate en Blockchain",
+  "workspaces": [
+    "contracts",
+    "backend",
+    "frontend",
+    "mobile"
+  ],
+  "scripts": {
+    "contracts:build": "cd contracts && forge build",
+    "contracts:test": "cd contracts && forge test",
+    "contracts:deploy": "cd contracts && forge script script/Deploy.s.sol:DeployScript --rpc-url $RPC_URL --private-key $PRIVATE_KEY --broadcast",
+    "backend:dev": "cd backend && npm run dev",
+    "backend:build": "cd backend && npm run build",
+    "frontend:dev": "cd frontend && npm run dev",
+    "frontend:build": "cd frontend && npm run build",
+    "mobile:start": "cd mobile && npx expo start",
+    "ml:start": "cd ml && python run.py",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install && cd ../mobile && npm install"
+  },
+  "keywords": [
+    "blockchain",
+    "nomad",
+    "avocado",
+    "waste-management",
+    "sustainability",
+    "mexico",
+    "michoacan",
+    "traceability",
+    "nft",
+    "defi"
+  ],
+  "author": "PERSÉA Protocol Team",
+  "license": "MIT"
+}

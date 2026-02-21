@@ -1,0 +1,11 @@
+{
+  "build": {
+    "env": {
+      "NODE_VERSION": "20"
+    }
+  },
+  "deploy": {
+    "startCommand": "node src/index.js",
+    "healthcheckPath": "/health"
+  }
+}
