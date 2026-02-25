@@ -240,9 +240,7 @@ MIT License - ver [LICENSE](LICENSE) para más detalles.
 
 ## 📧 Contacto
 
-- Email: contacto@perseaprotocol.io
-- Twitter: @perseaprotocol
-- GitHub: github.com/persea-protocol
+- Email: dfrmnc22@gmail.com
 
 ---
 
