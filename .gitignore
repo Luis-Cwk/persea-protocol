@@ -29,3 +29,6 @@ mobile/node_modules/
 .vscode/
 *.swp
 *.swo
+
+*.mp4
+*.mov
