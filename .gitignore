@@ -32,3 +32,13 @@ mobile/node_modules/
 
 *.mp4
 *.mov
+
+# === Proteccion de credenciales (agregado 2026-11) ===
+.env
+.env.*
+!.env.example
+.env.bak*
+.env.pre-*
+*.bak-*
+*.pem
+*.key
